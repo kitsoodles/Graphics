@@ -38,4 +38,8 @@ in scene objects as well as added textures can be found in the objects file
 and materials used in scene can be found in the materials file 
 ![image](https://user-images.githubusercontent.com/98484257/218816006-ad3e5d6f-9503-42ab-a562-e8657745f8c4.png)
 
+He also has a small animation that went unused in our game, just some simple idle motion so you can see the effects of the model in motion.
+![ezgif com-video-to-gif](https://user-images.githubusercontent.com/98484257/218819427-c8d5f118-7cf0-4bd2-ba98-c99a8e224cf1.gif)
+
+
 Hope you have a great rest of your day!
