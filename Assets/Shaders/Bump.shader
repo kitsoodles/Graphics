@@ -1,25 +1,44 @@
 Shader "Custom/Bump"
 {
     Properties{
-        _myDiffuse("Diffuse Texture", 2D) = "white" {}//These will open the door to using diffuse lighting with the normal mapped
-        _myBump("Bump Texture", 2D) = "bump" {}       //texture being changeable with a slider between 0 and 10
+        _myDiffuse("Diffuse Texture", 2D) = "blue" {}
+        _myBump("Bump Texture", 2D) = "bump" {}      
         _mySlider("Bump Amount", Range(0,10)) = 1
+        _Color("Color", Color) = (1, 1, 1, 1)
+        _MetallicTex("Metallic (R)", 2D) = "blue" {}
+        _Metallic("Metallic", Range(0.0, 1.0)) = 0.0
+        _myCube("Reflection Map", Cube) = "blue" {}
     }
 
         SubShader{
+            Tags
+            {
+                "Queue" = "Geometry"
+            }
+
          CGPROGRAM
-         #pragma surface surf Lambert//compiling as a lambert type of shader, essentially utilizing diffuse lighting as a fundamental force
-         sampler2D _myDiffuse;//Our variables needed for outputting
+         #pragma surface surf StandardSpecular 
+         sampler2D _MetallicTex;
+         samplerCUBE _myCube;
+         half _Metallic;
+         fixed4 _Color;
+         sampler2D _myDiffuse;
          sampler2D _myBump;
          half _mySlider;
-         struct Input {//outputting our uv coords of the diffuse lighting and the normal mapped texture
+
+         struct Input {
          float2 uv_myDiffuse;
          float2 uv_myBump;
+         float2 uv_MetallicTex;
          };
-         void surf(Input IN, inout SurfaceOutput o) {//Our albedo has the diffuse texture and its uv coords colors
+
+         void surf(Input IN, inout SurfaceOutputStandardSpecular o) {
              o.Albedo = tex2D(_myDiffuse, IN.uv_myDiffuse).rgb;
-             o.Normal = UnpackNormal(tex2D(_myBump, IN.uv_myBump));//the surface normal has the unpacked normal mapped texture and uv coords
-             o.Normal *= float3(_mySlider, _mySlider, 1);//the surface is multipled by the current value of the slider
+             o.Normal = UnpackNormal(tex2D(_myBump, IN.uv_myBump));
+             o.Normal *= float3(_mySlider, _mySlider, 1);
+             o.Albedo = _Color.rgb;
+             o.Smoothness = tex2D(_MetallicTex, IN.uv_MetallicTex).r;
+             o.Specular = _Metallic;
 
          }
          ENDCG
